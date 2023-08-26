@@ -1,6 +1,6 @@
 //@version=5
 // Credit to @kv4coins for their work on this volume profile found here https://www.tradingview.com/script/r3VrWAO4-Volume-Profile/ which inspired the code behind this volume profile
-indicator(title      = "Volume Profile with Bull/Bear Volume", 
+indicator(title      = "Volume Profile with Buy/Sell Pressure", 
      shorttitle      = "Volume Profile", 
      overlay         = true, 
      precision       = 4, 
@@ -14,7 +14,7 @@ lookBack   = input.int(defval = 200,
                      minval  = 10, 
                      maxval  = 1000)
 
-maxBars   = input.int(defval = 200, 
+maxBars   = input.int(defval = 250, 
                      title   = "Number of Bars [10-300]",
                      minval  = 10, 
                      maxval  = 300)
@@ -37,16 +37,16 @@ barWidth  = input.int(defval = 2,
 showPOC   = input.bool(defval = true, title   = "Show POC (Point of Control)")
 
 barColor  = input(defval = color.new(#666666, 30), 
-                     title   = "Cumulative Volume Bar Color")
+                     title   = "Cumulative Volume Color")
 
 pocColor  = input(defval = color.new(#fa9c0f, 10), 
                      title   = "POC Color")
 
 bullColor  = input(defval = color.rgb(8, 153, 129, 30), 
-                     title   = "Bull Volume Dominant Bar Color")
+                     title   = "Buy Pressure Color")
 
 bearColor  = input(defval = color.rgb(242, 54, 69, 30), 
-                     title   = "Bear Volume Dominant Bar Color")
+                     title   = "Sell Pressure Color")
 
 // Initialize Variables
 var float maxVolume = 0.0
