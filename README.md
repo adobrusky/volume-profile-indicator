@@ -17,7 +17,8 @@ This Pinescript indicator displays a volume profile that shows both cumulative v
 3. Click on the "Pine Script" tab, paste the code into the editor, and save the script.
 4. Apply the indicator to your chart by selecting it from the list of available indicators.
 5. Configure the indicator's settings according to your preferences.
-6. The chart will now show the cumulative volume profile as well as the buy/sell pressure. Below is an example of the volume profile on the SPY daily chart. 
+6. The chart will now show the cumulative volume profile as well as the buy/sell pressure. Below is an example of the volume profile on the SPY daily chart.
+
 ![Example Volume Profile on SPY daily chart](https://i.imgur.com/OsJ66BV.png)
 
 
