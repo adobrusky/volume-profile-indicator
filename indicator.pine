@@ -3,12 +3,12 @@
 indicator(title = "Volume Profile with Buy/Sell Pressure", shorttitle = "Volume Profile", overlay = true, precision = 4, linktoseries = true, max_bars_back = 1000, max_lines_count = 500)
 
 // User Inputs
-lookBack = input.int(defval = 200, title = "Volume Lookback Depth [10-1000]", minval = 10, maxval = 1000)
-maxBars = input.int(defval = 250, title = "Number of Bars [10-300]", minval = 10, maxval = 300)
-barMultiplier = input.int(defval = 50, title = "Bar Length Multiplier [10-100]", minval = 10, maxval = 100)
-horizontalOffset = input.int(defval = 30, title = "Bar Horizontal Offset [0-100]", minval = 0, maxval = 100)
-barWidth = input.int(defval = 2, title = "Bar Width [1-20]", minval = 1, maxval = 20)
-showPOC = input.bool(defval = true, title = "Show POC (Point of Control)")
+lookBack = input.int(defval = 200, title = "Volume Lookback Depth", minval = 10, maxval = 1000)
+maxBars = input.int(defval = 250, title = "Number of Bars", minval = 10, maxval = 300)
+barMultiplier = input.int(defval = 50, title = "Bar Length Multiplier", minval = 10, maxval = 100)
+horizontalOffset = input.int(defval = 30, title = "Bar Horizontal Offset", minval = 0, maxval = 100)
+barWidth = input.int(defval = 2, title = "Bar Width", minval = 1, maxval = 20)
+showPOC = input.bool(defval = true, title = "Show POC")
 barColor = input(defval = color.new(#666666, 30), title = "Cumulative Volume Color")
 pocColor = input(defval = color.new(#fa9c0f, 10), title = "POC Color")
 bullColor = input(defval = color.rgb(8, 153, 129, 30), title = "Buy Pressure Color")
