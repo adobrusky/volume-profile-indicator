@@ -3,13 +3,13 @@
 // © adobrusky
 
 //@version=5
-indicator("Volume Profile with Buy/Sell Pressure", shorttitle = "Volume Profile", overlay = true, precision = 4, linktoseries = true, max_bars_back = 1000, max_lines_count = 500)
+indicator("Volume Profile with Buy/Sell Pressure", shorttitle = "Volume Profile", overlay = true, precision = 4, max_bars_back = 1000, max_lines_count = 500)
 
 // User Inputs
 lookBack = input.int(200, title = "Volume Lookback Depth", minval = 10, maxval = 1000)
 maxBars = input.int(250, title = "Number of Bars", minval = 10, maxval = 300)
-barMultiplier = input.int( 50, title = "Bar Length Multiplier", minval = 10, maxval = 100)
-horizontalOffset = input.int(defval = 30, title = "Bar Horizontal Offset", minval = 0, maxval = 100)
+barMultiplier = input.int(50, title = "Bar Length Multiplier", minval = 10, maxval = 500)
+horizontalOffset = input.int(defval = 30, title = "Bar Horizontal Offset", minval = -100, maxval = 100)
 barWidth = input.int(2, title = "Bar Width", minval = 1, maxval = 20)
 showPOC = input.bool(defval = true, title = "Show POC")
 barColor = input(color.new(#666666, 30), title = "Cumulative Volume Color")
@@ -22,7 +22,7 @@ var hideProfile = na(volume)
 var float maxVolume = 0.0
 var float maxVolumeBullBear = 0.0
 var int maxVolumeIndex = 0
-
+barTimeChange = ta.change(time)
 var int firstBarTime = time
 
 priceLevels = array.new_float((maxBars + 1), 0.0)
@@ -35,7 +35,6 @@ barHeightsBullBear = array.new_int(maxBars, 0)
 
 float highestHigh = ta.highest(high, lookBack)
 float lowestLow = ta.lowest(low, lookBack)
-
 // Calculate Price Levels
 if barstate.islast and not hideProfile
     float priceRange = (highestHigh - lowestLow) / maxBars
@@ -85,10 +84,10 @@ if barstate.islast and not hideProfile
     // Calculate Bar Heights
     for j = 0 to (maxBars - 1)
         float currentVolume = array.get(cumulativeVolume, j)
-        int barHeight = math.round(barMultiplier * currentVolume / maxVolume)
+        int barHeight = math.round(barMultiplier * (currentVolume / maxVolume))
         array.set(barHeightsCumulative, j, barHeight)
         float currentVolumeBullBear = array.get(cumulativeBullBearVolume, j)
-        int barHeightBullBear = math.round(barMultiplier * currentVolumeBullBear / maxVolume)
+        int barHeightBullBear = math.round(barMultiplier * (currentVolumeBullBear / maxVolume))
         array.set(barHeightsBullBear, j, barHeightBullBear)
 
 // Store First Bar Time
@@ -96,22 +95,21 @@ if barstate.isfirst
     firstBarTime := time
 
 // Calculate Bar X-Location
-barTimeChange = ta.change(time)
-barXLocation = timenow + math.round(barTimeChange * horizontalOffset)
+endX = time + math.round(barTimeChange * horizontalOffset)
 
 // Set Up Bars
 setupBarCumulative(n) =>
-    x1 = ((maxVolumeIndex == n) and showPOC) ? math.max(time[lookBack], firstBarTime) : (timenow + math.round(barTimeChange * (horizontalOffset - array.get(barHeightsCumulative, n))))
-    ys = array.get(priceLevels, n)
-    line.new(x1     = x1, 
-             y1     = ys, 
-             x2     = barXLocation, 
-             y2     = ys, 
-             xloc   = xloc.bar_time, 
-             extend = extend.none, 
-             color  = (maxVolumeIndex == n ? pocColor : barColor), 
-             style  = line.style_solid, 
-             width  = (maxVolumeIndex == n ? barWidth + 1 : barWidth))
+    startX = ((maxVolumeIndex == n) and showPOC) ? math.max(time[lookBack], firstBarTime) : (time + math.round(barTimeChange * (horizontalOffset - array.get(barHeightsCumulative, n))))
+    price = array.get(priceLevels, n)
+    line.new(x1     = startX,
+             y1     = price,
+             x2     = endX,
+             y2     = price,
+             xloc   = xloc.bar_time,
+             extend = extend.none,
+             color  = (maxVolumeIndex == n and showPOC ? pocColor : barColor),
+             style  = line.style_solid,
+             width  = (maxVolumeIndex == n and showPOC ? barWidth + 1 : barWidth))
 
 setupBarBullBear(n) =>
     barHeight = array.get(barHeightsBullBear, n)
@@ -119,16 +117,16 @@ setupBarBullBear(n) =>
     if barHeight > 0
         isBearVolume := 0
         barHeight := barHeight * -1
-    x1 = timenow + math.round(barTimeChange * (horizontalOffset - barHeight))
-    ys = array.get(priceLevels, n)
-    line.new(x1     = x1, 
-             y1     = ys, 
-             x2     = barXLocation, 
-             y2     = ys, 
-             xloc   = xloc.bar_time, 
-             extend = extend.none, 
-             color  = (isBearVolume ? bearColor : bullColor), 
-             style  = line.style_solid, 
+    startX = time + math.round(barTimeChange * (horizontalOffset - barHeight))
+    price = array.get(priceLevels, n)
+    line.new(x1     = startX,
+             y1     = price,
+             x2     = endX,
+             y2     = price,
+             xloc   = xloc.bar_time,
+             extend = extend.none,
+             color  = (isBearVolume ? bearColor : bullColor),
+             style  = line.style_solid,
              width  = barWidth)
 
 // Draw Bars
