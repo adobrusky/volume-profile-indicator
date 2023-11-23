@@ -23,7 +23,6 @@ var float maxVolume = 0.0
 var float maxVolumeBullBear = 0.0
 var int maxVolumeIndex = 0
 barTimeChange = ta.change(time)
-var int firstBarTime = time
 
 priceLevels = array.new_float((maxBars + 1), 0.0)
 cumulativeVolume = array.new_float(maxBars, 0.0)
@@ -90,22 +89,17 @@ if barstate.islast and not hideProfile
         int barHeightBullBear = math.round(barMultiplier * (currentVolumeBullBear / maxVolume))
         array.set(barHeightsBullBear, j, barHeightBullBear)
 
-// Store First Bar Time
-if barstate.isfirst
-    firstBarTime := time
-
-// Calculate Bar X-Location
-endX = time + math.round(barTimeChange * horizontalOffset)
+endX = bar_index + horizontalOffset
 
 // Set Up Bars
 setupBarCumulative(n) =>
-    startX = ((maxVolumeIndex == n) and showPOC) ? math.max(time[lookBack], firstBarTime) : (time + math.round(barTimeChange * (horizontalOffset - array.get(barHeightsCumulative, n))))
+    startX = ((maxVolumeIndex == n) and showPOC) ? bar_index - lookBack : endX - array.get(barHeightsCumulative, n)
     price = array.get(priceLevels, n)
     line.new(x1     = startX,
              y1     = price,
              x2     = endX,
              y2     = price,
-             xloc   = xloc.bar_time,
+             xloc   = xloc.bar_index,
              extend = extend.none,
              color  = (maxVolumeIndex == n and showPOC ? pocColor : barColor),
              style  = line.style_solid,
@@ -117,13 +111,13 @@ setupBarBullBear(n) =>
     if barHeight > 0
         isBearVolume := 0
         barHeight := barHeight * -1
-    startX = time + math.round(barTimeChange * (horizontalOffset - barHeight))
+    startX = endX - barHeight
     price = array.get(priceLevels, n)
     line.new(x1     = startX,
              y1     = price,
              x2     = endX,
              y2     = price,
-             xloc   = xloc.bar_time,
+             xloc   = xloc.bar_index,
              extend = extend.none,
              color  = (isBearVolume ? bearColor : bullColor),
              style  = line.style_solid,
