@@ -8,14 +8,16 @@ indicator("Volume Profile with Buy/Sell Pressure", shorttitle = "Volume Profile"
 // User Inputs
 lookBack = input.int(200, title = "Volume Lookback Depth", minval = 10, maxval = 1000)
 maxBars = input.int(250, title = "Number of Bars", minval = 10, maxval = 300)
-barMultiplier = input.int(50, title = "Bar Length Multiplier", minval = 10, maxval = 500)
-horizontalOffset = input.int(defval = 30, title = "Bar Horizontal Offset", minval = -100, maxval = 100)
-barWidth = input.int(2, title = "Bar Width", minval = 1, maxval = 20)
+barMultiplier = input.int(40, title = "Bar Length Multiplier", minval = 10, maxval = 500)
+horizontalOffset = input.int(defval = 45, title = "Bar Horizontal Offset", minval = -100, maxval = 100)
+barWidth = input.int(3, title = "Bar Width", minval = 1, maxval = 20)
 showPOC = input.bool(defval = true, title = "Show POC")
-barColor = input(color.new(#666666, 30), title = "Cumulative Volume Color")
+showCumulative = input.bool(defval = true, title = "Show Cumulative Volume")
+showPressure = input.bool(defval = true, title = "Show Buy/Sell Pressure")
+barColor = input(color.new(#666666, 15), title = "Cumulative Volume Color")
 pocColor = input(color.rgb(243, 152, 15), title = "POC Color")
-bullColor = input(color.rgb(8, 153, 129, 30), title = "Buy Pressure Color")
-bearColor = input(color.rgb(242, 54, 69, 30), title = "Sell Pressure Color")
+bullColor = input(color.rgb(8, 153, 129, 15), title = "Buy Pressure Color")
+bearColor = input(color.rgb(242, 54, 69, 15), title = "Sell Pressure Color")
 
 // Initialize Variables
 var hideProfile = na(volume)
@@ -126,5 +128,7 @@ setupBarBullBear(n) =>
 // Draw Bars
 if barstate.islast and not hideProfile
     for i = 0 to (maxBars - 1) by 1
-        setupBarCumulative(i)
-        setupBarBullBear(i)
+        if showCumulative
+            setupBarCumulative(i)
+        if showPressure
+            setupBarBullBear(i)
