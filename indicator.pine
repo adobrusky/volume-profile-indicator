@@ -10,12 +10,12 @@ lookBack = input.int(200, title = "Volume Lookback Depth", minval = 10, maxval =
 maxBars = input.int(250, title = "Number of Bars", minval = 10, maxval = 300)
 barMultiplier = input.int(40, title = "Bar Length Multiplier", minval = 10, maxval = 500)
 horizontalOffset = input.int(defval = 45, title = "Bar Horizontal Offset", minval = -100, maxval = 100)
-barWidth = input.int(3, title = "Bar Width", minval = 1, maxval = 20)
+barWidth = input.int(4, title = "Bar Width", minval = 1, maxval = 20)
 showPOC = input.bool(defval = true, title = "Show POC")
 showCumulative = input.bool(defval = true, title = "Show Cumulative Volume")
 showPressure = input.bool(defval = true, title = "Show Buy/Sell Pressure")
 barColor = input(color.new(#666666, 15), title = "Cumulative Volume Color")
-pocColor = input(color.rgb(243, 152, 15), title = "POC Color")
+pocColor = input(color.rgb(242, 54, 69, 15), title = "POC Color")
 bullColor = input(color.rgb(8, 153, 129, 15), title = "Buy Pressure Color")
 bearColor = input(color.rgb(242, 54, 69, 15), title = "Sell Pressure Color")
 
@@ -36,6 +36,7 @@ barHeightsBullBear = array.new_int(maxBars, 0)
 
 float highestHigh = ta.highest(high, lookBack)
 float lowestLow = ta.lowest(low, lookBack)
+
 // Calculate Price Levels
 if barstate.islast and not hideProfile
     float priceRange = (highestHigh - lowestLow) / maxBars
