@@ -19,7 +19,7 @@ This Pinescript indicator displays a volume profile that shows both cumulative v
 5. Configure the indicator's settings according to your preferences.
 6. The chart will now show the cumulative volume profile as well as the buy/sell pressure. Below is a screenshot of the volume profile on the SPY weekly chart.
 
-![Volume Profile on SPY weekly chart](https://imgur.com/a/8VO2oJa)
+![Volume Profile on SPY weekly chart](https://i.imgur.com/Zdtp5Ze.png)
 
 
 
