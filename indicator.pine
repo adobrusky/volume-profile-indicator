@@ -1,19 +1,17 @@
 // This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
-// Credit to @kv4coins for their work on this volume profile found here https://www.tradingview.com/script/r3VrWAO4-Volume-Profile/ which inspired the code behind this volume profile
-// © adobrusky
 
 //@version=5
 indicator("Volume Profile with Buy/Sell Pressure", shorttitle = "Volume Profile", overlay = true, precision = 4, max_bars_back = 1000, max_lines_count = 500)
 
 // User Inputs
-lookBack = input.int(200, title = "Volume Lookback Depth", minval = 10, maxval = 1000)
-maxBars = input.int(250, title = "Number of Bars", minval = 10, maxval = 300)
-barMultiplier = input.int(40, title = "Bar Length Multiplier", minval = 10, maxval = 500)
-horizontalOffset = input.int(defval = 45, title = "Bar Horizontal Offset", minval = -100, maxval = 100)
-barWidth = input.int(4, title = "Bar Width", minval = 1, maxval = 20)
-showPOC = input.bool(defval = true, title = "Show POC")
-showCumulative = input.bool(defval = true, title = "Show Cumulative Volume")
-showPressure = input.bool(defval = true, title = "Show Buy/Sell Pressure")
+lookBack = input.int(200, title = "Volume Lookback Depth", minval = 10, maxval = 1000, tooltip = "The number of bars to look back for calculating the volume profile.")
+maxBars = input.int(250, title = "Number of Bars", minval = 10, maxval = 300, tooltip = "The number of horizontal bars to use for the volume profile.")
+barMultiplier = input.int(40, title = "Bar Length Multiplier", minval = 10, maxval = 500, tooltip = "Multiplier to adjust the length of the volume profile bars.")
+horizontalOffset = input.int(defval = 45, title = "Bar Horizontal Offset", minval = -100, maxval = 100, tooltip = "Horizontal offset for the volume profile from the most recent bar.")
+barWidth = input.int(4, title = "Bar Width", minval = 1, maxval = 20, tooltip = "The width of the volume profile bars.")
+showPOC = input.bool(defval = true, title = "Show POC", tooltip = "Enable to show the Point of Control (POC) on the volume profile.")
+showCumulative = input.bool(defval = true, title = "Show Cumulative Volume", tooltip = "Enable to show the cumulative volume for each price level.")
+showPressure = input.bool(defval = true, title = "Show Buy/Sell Pressure", tooltip = "Enable to show buy/sell pressure at each price level.")
 barColor = input(color.new(#666666, 15), title = "Cumulative Volume Color")
 pocColor = input(color.rgb(242, 54, 69, 15), title = "POC Color")
 bullColor = input(color.rgb(8, 153, 129, 15), title = "Buy Pressure Color")
